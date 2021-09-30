@@ -1,7 +1,16 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
-enum { _DEF = 0, _MOV, _SYM, _CLR, _WTF };
+enum { _DEF = 0, _CLR, _MOV, _SYM, _WTF };
+
+enum my_keycodes {
+    KC_TGSF = SAFE_RANGE,
+    KC_TGSP,
+    KC_TGAL,
+    KC_TGCT,
+    KC_CLRM,
+    KC_TGMM,
+};
 
 #define M_LS(kc) MT(MOD_LSFT, kc)
 #define M_LG(kc) MT(MOD_LGUI, kc)
@@ -31,42 +40,112 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_LBRC,
        KC_ESC,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
       KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RBRC,
-                                     TG(_CLR), MO(_SYM), KC_SPC,    KC_ENT, MO(_MOV), KC_BSPC
+                                     TT(_CLR), MO(_SYM), KC_SPC,    KC_ENT, MO(_MOV), KC_BSPC
   ),
 
-  [_SYM] = HRM_LAYOUT_split_3x6_3(
-      XXXXXXX,   KC_AT, KC_PIPE, XXXXXXX, XXXXXXX,  KC_GRV,             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-     TG(_SYM), KC_EXLM, KC_AMPR, KC_QUES, KC_LPRN, KC_RPRN,             KC_LCBR, KC_RCBR,  KC_EQL, KC_UNDS, KC_CIRC, XXXXXXX,
-      XXXXXXX,  KC_DLR, KC_PERC, KC_BSLS, KC_HASH, XXXXXXX,             KC_LBRC, KC_RBRC, KC_PLUS, KC_ASTR, KC_BSLS, XXXXXXX,
-                                     TG(_CLR), _______, KC_SPC,     KC_ENT, MO(_WTF), KC_BSPC
+  [_SYM] = LAYOUT_split_3x6_3(
+      XXXXXXX,   KC_AT, KC_PIPE, XXXXXXX, XXXXXXX,  KC_GRV,             XXXXXXX, XXXXXXX, XXXXXXX, KC_MINS, XXXXXXX, XXXXXXX,
+     TT(_SYM), KC_EXLM, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES,              KC_EQL, KC_LCBR, KC_RCBR, KC_UNDS, KC_CIRC, XXXXXXX,
+      KC_LSFT,  KC_DLR, KC_PERC, KC_BSLS, KC_HASH, XXXXXXX,             KC_ASTR, KC_LBRC, KC_RBRC, KC_PLUS, KC_BSLS, XXXXXXX,
+                                     TT(_CLR), _______, KC_SPC,     KC_ENT, MO(_WTF), KC_DEL
   ),
 
   [_MOV] = HRM_LAYOUT_split_3x6_3(
-       KC_TAB, KC_PCMM,   KC_P7,   KC_P8,   KC_P9, XXXXXXX,             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-     TG(_MOV), KC_PDOT,   KC_P4,   KC_P5,   KC_P6, XXXXXXX,             KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
-      KC_LSFT,   KC_P0,   KC_P1,   KC_P2,   KC_P3, XXXXXXX,             KC_HOME, KC_PGDN, KC_PGUP,  KC_END, XXXXXXX, XXXXXXX,
-                                   TG(_CLR), MO(_WTF), KC_SPC,      KC_ENT, _______, KC_BSPC
+       KC_TAB, KC_COMM,    KC_7,    KC_8,    KC_9, XXXXXXX,             XXXXXXX, XXXXXXX,  KC_INS, XXXXXXX, XXXXXXX, XXXXXXX,
+     TT(_MOV),  KC_DOT,    KC_4,    KC_5,    KC_6, XXXXXXX,             KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
+      KC_LSFT,    KC_0,    KC_1,    KC_2,    KC_3, XXXXXXX,             KC_HOME, KC_PGDN, KC_PGUP,  KC_END, XXXXXXX, XXXXXXX,
+                                   TT(_CLR), MO(_WTF), KC_SPC,      KC_ENT, _______, KC_BSPC
   ),
 
   [_WTF] = LAYOUT_split_3x6_3(
-        RESET, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-     TG(_WTF), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                     TG(_CLR), _______, KC_SPC,     KC_ENT, _______, KC_BSPC
+        RESET,  KC_F10,   KC_F7,   KC_F8,   KC_F9, XXXXXXX,             KC_TGMM, KC_TGCT, KC_TGAL, KC_TGSP, RGB_HUI, RGB_TOG,
+     TT(_WTF),  KC_F11,   KC_F4,   KC_F5,   KC_F6, XXXXXXX,             KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, KC_TGSF, RGB_MOD,
+      KC_LSFT,  KC_F12,   KC_F1,   KC_F2,   KC_F3, XXXXXXX,             KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, RGB_VAI, RGB_SPI,
+                                     TT(_CLR), _______, KC_SPC,     KC_ENT, _______, KC_BSPC
   ),
 
   [_CLR] = LAYOUT_split_3x6_3(
        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_LBRC,
        KC_ESC,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
       KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RBRC,
-                                     TG(_CLR), MO(_SYM), KC_SPC,    KC_ENT, MO(_MOV), KC_BSPC
+                                     TT(_CLR), MO(_SYM), KC_SPC,    KC_ENT, MO(_MOV), KC_BSPC
   ),
 };
 /* clang-format on */
 
+bool shift_locked = false;
+bool super_locked = false;
+bool alt_locked   = false;
+bool ctrl_locked  = false;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case KC_TGSF:
+            if (record->event.pressed) {
+                shift_locked = !shift_locked;
+                if (shift_locked) {
+                    add_mods(MOD_MASK_SHIFT);
+                } else {
+                    del_mods(MOD_MASK_SHIFT);
+                }
+            }
+            return false;
+        case KC_TGSP:
+            if (record->event.pressed) {
+                super_locked = !alt_locked;
+                if (super_locked) {
+                    add_mods(MOD_MASK_GUI);
+                } else {
+                    del_mods(MOD_MASK_GUI);
+                }
+            }
+            return false;
+        case KC_TGAL:
+            if (record->event.pressed) {
+                alt_locked = !alt_locked;
+                if (alt_locked) {
+                    add_mods(MOD_MASK_ALT);
+                } else {
+                    del_mods(MOD_MASK_ALT);
+                }
+            }
+            return false;
+        case KC_TGCT:
+            if (record->event.pressed) {
+                ctrl_locked = !ctrl_locked;
+                if (ctrl_locked) {
+                    add_mods(MOD_MASK_CTRL);
+                } else {
+                    del_mods(MOD_MASK_CTRL);
+                }
+            }
+            return false;
+        case KC_CLRM:
+            if (record->event.pressed) {
+                shift_locked = false;
+                super_locked = false;
+                alt_locked   = false;
+                ctrl_locked  = false;
+                clear_mods();
+            }
+            return false;
+        case KC_TGMM:
+            if (record->event.pressed) {
+                shift_locked = true;
+                super_locked = true;
+                alt_locked   = true;
+                ctrl_locked  = true;
+                set_mods(MOD_MASK_CSAG);
+            }
+            return false;
+        default:
+            return true;
+    }
+}
+
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (!is_keyboard_master()) {
-        return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
+        return OLED_ROTATION_180;
     }
     return OLED_ROTATION_270;
 }
@@ -75,58 +154,118 @@ void oled_render_layer_state(void) {
     oled_write_P(PSTR("@:"), false);
     switch (biton32(layer_state)) {
         case _MOV:
-            oled_write_ln_P(PSTR("mov"), false);
+            oled_write_P(PSTR("mov"), false);
             break;
         case _SYM:
-            oled_write_ln_P(PSTR("sym"), false);
+            oled_write_P(PSTR("sym"), false);
             break;
         case _WTF:
-            oled_write_ln_P(PSTR("wtf"), false);
+            oled_write_P(PSTR("wtf"), false);
             break;
         case _CLR:
-            oled_write_ln_P(PSTR("clr"), false);
+            oled_write_P(PSTR("clr"), true);
             break;
         default:
-            oled_write_ln_P(PSTR("def"), false);
+            oled_write_P(PSTR("def"), false);
             break;
     }
 }
 
 void oled_render_wpm(void) {
-    uint8_t wpm        = get_current_wpm();
-    uint8_t dig[3]     = {wpm / 100, wpm / 10 % 10, wpm % 10};
-    char    wpm_str[3] = {dig[0] ? dig[0] + '0' : ' ', dig[0] || dig[1] ? dig[1] + '0' : ' ', dig[2] + '0'};
-    char    str[5]     = "#:";
-    strcat(str, wpm_str);
-    oled_write_ln(str, false);
+    char wpm_str[6];
+    sprintf(wpm_str, "#:%3d", get_current_wpm());
+    oled_write(wpm_str, false);
+}
+
+void oled_render_rgbinfo(void) {
+    oled_write_P(PSTR("m:"), false);
+    if (rgb_matrix_is_enabled()) {
+        switch (rgb_matrix_get_mode()) {
+            case 2:
+                oled_write_P(PSTR("rsm"), false);
+                break;
+            case 3:
+                oled_write_P(PSTR("rsl"), false);
+                break;
+            case 4:
+                oled_write_P(PSTR("rwd"), false);
+                break;
+            case 5:
+                oled_write_P(PSTR("rnx"), false);
+                break;
+            case 6:
+                oled_write_P(PSTR("spl"), false);
+                break;
+            case 7:
+                oled_write_P(PSTR("ssp"), false);
+                break;
+            default:
+                oled_write_P(PSTR("sld"), false);
+                break;
+        }
+    } else {
+        oled_write_P(PSTR("off"), true);
+    }
+
+    char hsv[16];
+    /* clang-format off */
+    sprintf(hsv, "h:%3ds:%3dv:%3d",
+            rgb_matrix_get_hue(),
+            rgb_matrix_get_speed(),
+            rgb_matrix_get_val());
+    /* clang-format on */
+    oled_write(hsv, false);
+}
+
+uint8_t mod_state;
+
+void oled_render_mods(void) {
+    mod_state = get_mods();
+    if (mod_state & MOD_MASK_GUI)
+        oled_write_P(PSTR("super"), super_locked);
+    else
+        oled_write_P(PSTR("     "), false);
+    if (mod_state & MOD_MASK_CTRL)
+        oled_write_P(PSTR(" ctrl"), ctrl_locked);
+    else
+        oled_write_P(PSTR("     "), false);
+    if (mod_state & MOD_MASK_ALT)
+        oled_write_P(PSTR("  alt"), alt_locked);
+    else
+        oled_write_P(PSTR("     "), false);
+    if (mod_state & MOD_MASK_SHIFT)
+        oled_write_P(PSTR("shift"), shift_locked);
+    else
+        oled_write_P(PSTR("     "), false);
 }
 
 void oled_render_logo(void) {
     /* clang-format off */
-    static const char PROGMEM crkbd_logo[] = {
+    static const char PROGMEM logo[] = {
         0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, 0x90, 0x91, 0x92, 0x93, 0x94,
         0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xaf, 0xb0, 0xb1, 0xb2, 0xb3, 0xb4,
         0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf, 0xd0, 0xd1, 0xd2, 0xd3, 0xd4,
     0 };
     /* clang-format on */
-    oled_write_P(crkbd_logo, false);
+    oled_write_P(logo, false);
 }
 
 void oled_task_user(void) {
     if (is_keyboard_master()) {
-        oled_write_ln_P(PSTR("█████"), false);
+        oled_write_P(PSTR("-----"), false);
         oled_render_layer_state();
-        oled_write_ln_P(PSTR("█████"), false);
+        oled_write_P(PSTR("-----"), false);
         oled_render_wpm();
-        oled_write_ln_P(PSTR("█████"), false);
+        oled_write_P(PSTR("-----"), false);
+        oled_render_rgbinfo();
+        oled_write_P(PSTR("-----"), false);
+        oled_render_mods();
     } else {
         oled_render_logo();
     }
 }
 
-float s_coef = 1;
-float v_coef = .4;
-
+#if false
 RGB get_rgb(HSV clr) {
     clr.s *= s_coef;
     clr.v *= v_coef;
@@ -215,28 +354,28 @@ HSV blue2  = {180, 255, 127};
 HSV purple = {201, 255, 127};
 HSV pink   = {222, 255, 127};
 
-#define DEF_S_COEF 1
-#define DEF_V_COEF .5
+#    define DEF_S_COEF 1
+#    define DEF_V_COEF .5
 
-#define C_BASE black
+#    define C_BASE black
 
-#define C_PRIM cyan
-#define C_PRIM2 purple
-#define C_SEC purple
-#define C_SEC2 azure
+#    define C_PRIM cyan
+#    define C_PRIM2 purple
+#    define C_SEC purple
+#    define C_SEC2 azure
 
-#define C_MOD yellow
-#define C_MOD_T orange
+#    define C_MOD yellow
+#    define C_MOD_T orange
 
-#define C_STICKY green
-#define C_STICKY_T orange
+#    define C_STICKY green
+#    define C_STICKY_T orange
 
-#define C_ESC lgreen
-#define C_ESC_T orange
+#    define C_ESC lgreen
+#    define C_ESC_T orange
 
-#define C_THUMB white
+#    define C_THUMB white
 
-#define C_KILL red
+#    define C_KILL red
 
 /* #    define USE_BL */
 
@@ -249,10 +388,10 @@ void rgb_matrix_indicators_user(void) {
     loop_clrset(R_LET, C_SEC);
     loop_clrset(R_HOME, C_PRIM);
 
-#ifdef USE_BL
+#    ifdef USE_BL
     loop_clrset(L_BL, C_PRIM2);
     loop_clrset(R_BL, C_SEC2);
-#endif
+#    endif
 
     set_clr(L_LF, C_THUMB);
     set_clr(L_RF, C_THUMB);
@@ -265,7 +404,7 @@ void rgb_matrix_indicators_user(void) {
 
     set_clr(L_ESC, C_ESC_T);
 
-    set_clr(L_SFT, C_PRIM2);
+    set_clr(L_SFT, shift_locked ? C_STICKY_T : C_PRIM2);
     set_clr(L_TAB, C_PRIM2);
 
     switch (biton32(layer_state)) {
@@ -295,3 +434,4 @@ void rgb_matrix_indicators_user(void) {
             break;
     }
 }
+#endif
