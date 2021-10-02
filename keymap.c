@@ -44,23 +44,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_SYM] = LAYOUT_split_3x6_3(
-      XXXXXXX,   KC_AT, KC_PIPE, XXXXXXX, XXXXXXX,  KC_GRV,             XXXXXXX, XXXXXXX, XXXXXXX, KC_MINS, XXXXXXX, XXXXXXX,
-     TT(_SYM), KC_EXLM, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES,              KC_EQL, KC_LCBR, KC_RCBR, KC_UNDS, KC_CIRC, XXXXXXX,
-      KC_LSFT,  KC_DLR, KC_PERC, KC_BSLS, KC_HASH, XXXXXXX,             KC_ASTR, KC_LBRC, KC_RBRC, KC_PLUS, KC_BSLS, XXXXXXX,
+      XXXXXXX,   KC_AT, KC_PIPE, XXXXXXX, XXXXXXX,  KC_GRV,             XXXXXXX, KC_PLUS, KC_MINS,  KC_EQL, XXXXXXX, XXXXXXX,
+     TT(_SYM), KC_EXLM, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES,             KC_DLR, KC_LCBR, KC_RCBR, KC_UNDS, KC_CIRC, XXXXXXX,
+      KC_LSFT,  KC_DLR, KC_PERC, KC_BSLS, KC_HASH, XXXXXXX,             KC_ASTR, KC_LBRC, KC_RBRC, KC_ASTR, KC_BSLS, XXXXXXX,
                                      TT(_CLR), _______, KC_SPC,     KC_ENT, MO(_WTF), KC_DEL
   ),
 
   [_MOV] = HRM_LAYOUT_split_3x6_3(
        KC_TAB, KC_COMM,    KC_7,    KC_8,    KC_9, XXXXXXX,             XXXXXXX, XXXXXXX,  KC_INS, XXXXXXX, XXXXXXX, XXXXXXX,
-     TT(_MOV),  KC_DOT,    KC_4,    KC_5,    KC_6, XXXXXXX,             KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
-      KC_LSFT,    KC_0,    KC_1,    KC_2,    KC_3, XXXXXXX,             KC_HOME, KC_PGDN, KC_PGUP,  KC_END, XXXXXXX, XXXXXXX,
+     TT(_MOV),  KC_TAB,    KC_4,    KC_5,    KC_6,  KC_DOT,             KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
+      KC_LSFT,    KC_0,    KC_1,    KC_2,    KC_3, KC_COMM,             KC_HOME, KC_PGDN, KC_PGUP,  KC_END, XXXXXXX, XXXXXXX,
                                    TT(_CLR), MO(_WTF), KC_SPC,      KC_ENT, _______, KC_BSPC
   ),
 
   [_WTF] = LAYOUT_split_3x6_3(
-        RESET,  KC_F10,   KC_F7,   KC_F8,   KC_F9, XXXXXXX,             KC_TGMM, KC_TGCT, KC_TGAL, KC_TGSP, RGB_HUI, RGB_TOG,
-     TT(_WTF),  KC_F11,   KC_F4,   KC_F5,   KC_F6, XXXXXXX,             KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, KC_TGSF, RGB_MOD,
-      KC_LSFT,  KC_F12,   KC_F1,   KC_F2,   KC_F3, XXXXXXX,             KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, RGB_VAI, RGB_SPI,
+        RESET,  KC_F10,   KC_F7,   KC_F8,   KC_F9,  KC_F20,             KC_TGMM, KC_TGCT, KC_TGAL, KC_TGSP, RGB_HUI, RGB_TOG,
+     TT(_WTF),  KC_F11,   KC_F4,   KC_F5,   KC_F6,  KC_F21,             KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, KC_TGSF, RGB_MOD,
+      KC_CLRM,  KC_F12,   KC_F1,   KC_F2,   KC_F3,  KC_F22,             KC_MSTP, KC_MPRV, KC_MNXT, KC_MPLY, RGB_VAI, RGB_SPI,
                                      TT(_CLR), _______, KC_SPC,     KC_ENT, _______, KC_BSPC
   ),
 
@@ -92,7 +92,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case KC_TGSP:
             if (record->event.pressed) {
-                super_locked = !alt_locked;
+                super_locked = !super_locked;
                 if (super_locked) {
                     add_mods(MOD_MASK_GUI);
                 } else {
