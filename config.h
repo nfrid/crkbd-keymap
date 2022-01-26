@@ -3,15 +3,15 @@
 //#define USE_MATRIX_I2C
 
 #define MASTER_LEFT
-// #define MASTER_RIGHT
+/* #define MASTER_RIGHT */
 // #define EE_HANDS
 
 #define USE_SERIAL_PD2
 
-/* #define TAPPING_FORCE_HOLD */
+#define TAPPING_FORCE_HOLD_PER_KEY
 #define IGNORE_MOD_TAP_INTERRUPT
-/* #define PERMISSIVE_HOLD */
-#define TAPPING_TERM 200
+#define PERMISSIVE_HOLD
+#define TAPPING_TERM 300
 
 #define TAPPING_TOGGLE 2
 
@@ -66,6 +66,8 @@
 /* #define DISABLE_RGB_MATRIX_MULTISPLASH */
 #define DISABLE_RGB_MATRIX_SOLID_SPLASH
 /* #define DISABLE_RGB_MATRIX_SOLID_MULTISPLASH */
+
+#define FORCE_NKRO
 
 #undef PRODUCT
 #define PRODUCT crkbd
