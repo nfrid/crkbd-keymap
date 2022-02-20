@@ -17,7 +17,7 @@ UNICODE_ENABLE     = no   # Unicode
 BLUETOOTH_ENABLE   = no   # Bluetooth
 SWAP_HANDS_ENABLE  = no   # One-hand typing
 
-WPM_ENABLE         = yes  # wpm meter
+WPM_ENABLE         = no   # wpm meter
 RGB_MATRIX_ENABLE  = yes  # WS2812 RGB matrix
 
 EXTRAFLAGS+=-flto  # Linking go brrrrr

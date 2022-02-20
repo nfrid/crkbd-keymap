@@ -207,10 +207,14 @@ void oled_render_layer_state(void) {
     }
 }
 
-void oled_render_wpm(void) {
-    char wpm_str[6];
-    sprintf(wpm_str, "#:%3d", get_current_wpm());
-    oled_write(wpm_str, false);
+// through caps lock indicator
+void oled_render_layout(void) {
+    oled_write_P(PSTR("lt:"), false);
+    if (IS_HOST_LED_ON(USB_LED_CAPS_LOCK)) {
+        oled_write_P(PSTR("ru"), true);
+    } else {
+        oled_write_P(PSTR("us"), false);
+    }
 }
 
 void oled_render_rgbinfo(void) {
@@ -286,12 +290,12 @@ void oled_render_logo(void) {
     oled_write_P(logo, false);
 }
 
-void oled_task_user(void) {
+bool oled_task_user(void) {
     if (is_keyboard_master()) {
         oled_write_P(PSTR("-----"), false);
         oled_render_layer_state();
         oled_write_P(PSTR("-----"), false);
-        oled_render_wpm();
+        oled_render_layout();
         oled_write_P(PSTR("-----"), false);
         oled_render_rgbinfo();
         oled_write_P(PSTR("-----"), false);
@@ -299,6 +303,8 @@ void oled_task_user(void) {
     } else {
         oled_render_logo();
     }
+
+  return false;
 }
 
 #if false
