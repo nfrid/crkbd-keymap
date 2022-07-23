@@ -22,3 +22,5 @@ RGB_MATRIX_ENABLE  = yes  # WS2812 RGB matrix
 
 EXTRAFLAGS+=-flto  # Linking go brrrrr
 AVR_CFLAGS=-Wno-array-bounds
+
+SRC += features/achordion.c

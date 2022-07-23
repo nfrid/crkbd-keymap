@@ -1,5 +1,8 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
+#ifdef ACHORDION
+#include "features/achordion.h"
+#endif
 
 enum { _DEF = 0, _CLR, _GM0, _GM1, _MOV, _SYM, _WTF };
 
@@ -43,14 +46,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_SYM] = LAYOUT_split_3x6_3(
-       KC_F11,   KC_AT, KC_PIPE, KC_MINS,  KC_EQL,  KC_GRV,             XXXXXXX, KC_PLUS, KC_MINS,  KC_EQL, XXXXXXX, XXXXXXX,
-     TG(_SYM), KC_EXLM, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES,             KC_DLR, KC_LCBR, KC_RCBR, KC_UNDS, KC_CIRC, XXXXXXX,
+       KC_F11,   KC_AT, KC_PIPE, KC_MINS,  KC_EQL,  KC_GRV,             XXXXXXX,  KC_PLUS, KC_MINS,  KC_EQL, XXXXXXX, XXXXXXX,
+     TG(_SYM), KC_EXLM, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES,             KC_DLR,  KC_LCBR, KC_RCBR, KC_UNDS, KC_CIRC, XXXXXXX,
       KC_LCTL,  KC_DLR, KC_PERC, KC_BSLS, KC_HASH, XXXXXXX,             KC_ASTR, KC_LBRC, KC_RBRC, KC_ASTR, KC_BSLS, XXXXXXX,
                                      TT(_CLR), _______, KC_SPC,     KC_ENT, MO(_WTF), KC_DEL
   ),
 
   [_MOV] = HRM_LAYOUT_split_3x6_3(
-       KC_TAB, KC_COMM,    KC_7,    KC_8,    KC_9, KC_TILD,             XXXXXXX, XXXXXXX,  KC_INS, XXXXXXX, XXXXXXX, XXXXXXX,
+       KC_TAB, KC_COMM,    KC_7,    KC_8,    KC_9, KC_TILD,             KC_COPY, XXXXXXX,  KC_INS, XXXXXXX, KC_PSTE, XXXXXXX,
      TG(_MOV),  KC_TAB,    KC_4,    KC_5,    KC_6,  KC_DOT,             KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
       KC_LSFT,    KC_0,    KC_1,    KC_2,    KC_3, KC_COMM,             KC_HOME, KC_PGDN, KC_PGUP,  KC_END, XXXXXXX, XXXXXXX,
                                    TT(_CLR), MO(_WTF), KC_SPC,      KC_ENT, _______, KC_BSPC
@@ -107,7 +110,17 @@ bool super_locked = false;
 bool alt_locked   = false;
 bool ctrl_locked  = false;
 
+#ifdef ACHORDION
+void matrix_scan_user(void) {
+  achordion_task();
+}
+#endif
+
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+#ifdef ACHORDION
+  if (!process_achordion(keycode, record)) { return false; }
+#endif
+
   switch (keycode) {
   case KC_TGSF:
     if (record->event.pressed) {
