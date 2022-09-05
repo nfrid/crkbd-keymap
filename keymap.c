@@ -111,14 +111,14 @@ bool alt_locked   = false;
 bool ctrl_locked  = false;
 
 #ifdef ACHORDION
-void matrix_scan_user(void) {
-  achordion_task();
-}
+void matrix_scan_user(void) { achordion_task(); }
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 #ifdef ACHORDION
-  if (!process_achordion(keycode, record)) { return false; }
+  if (!process_achordion(keycode, record)) {
+    return false;
+  }
 #endif
 
   switch (keycode) {
@@ -230,39 +230,38 @@ void oled_render_layout(void) {
 }
 
 void oled_render_rgbinfo(void) {
-  oled_write_P(PSTR("m:"), false);
-  if (rgb_matrix_is_enabled()) {
-    switch (rgb_matrix_get_mode()) {
-    case 2:
-      oled_write_P(PSTR("rsm"), false);
-      break;
-    case 3:
-      oled_write_P(PSTR("rsl"), false);
-      break;
-    case 4:
-      oled_write_P(PSTR("rwd"), false);
-      break;
-    case 5:
-      oled_write_P(PSTR("rnx"), false);
-      break;
-    case 6:
-      oled_write_P(PSTR("spl"), false);
-      break;
-    case 7:
-      oled_write_P(PSTR("ssp"), false);
-      break;
-    default:
-      oled_write_P(PSTR("sld"), false);
-      break;
-    }
-  } else {
-    oled_write_P(PSTR("off"), true);
-  }
-
-  char hsv[16];
+  // oled_write_P(PSTR("m:"), false);
+  // if (rgb_matrix_is_enabled()) {
+  //   switch (rgb_matrix_get_mode()) {
+  //   case 2:
+  //     oled_write_P(PSTR("rsm"), false);
+  //     break;
+  //   case 3:
+  //     oled_write_P(PSTR("rsl"), false);
+  //     break;
+  //   case 4:
+  //     oled_write_P(PSTR("rwd"), false);
+  //     break;
+  //   case 5:
+  //     oled_write_P(PSTR("rnx"), false);
+  //     break;
+  //   case 6:
+  //     oled_write_P(PSTR("spl"), false);
+  //     break;
+  //   case 7:
+  //     oled_write_P(PSTR("ssp"), false);
+  //     break;
+  //   default:
+  //     oled_write_P(PSTR("sld"), false);
+  //     break;
+  //   }
+  // } else {
+  //   oled_write_P(PSTR("off"), true);
+  // }
+  //
+  char hsv[11];
   /* clang-format off */
-    sprintf(hsv, "h:%3ds:%3dv:%3d",
-            rgb_matrix_get_hue(),
+    sprintf(hsv, "s:%3dv:%3d",
             rgb_matrix_get_speed(),
             rgb_matrix_get_val());
   /* clang-format on */
@@ -323,173 +322,49 @@ bool oled_task_user(void) {
   return false;
 }
 
-#if false
-RGB get_rgb(HSV clr) {
-    clr.s *= s_coef;
-    clr.v *= v_coef;
-    RGB rgb = hsv_to_rgb(clr);
-    return rgb;
+HSV  c_default = { 120, 255, 255 };
+HSV  c_mov     = { 90, 255, 255 };
+HSV  c_sym     = { 160, 255, 255 };
+HSV  c_wtf     = { 220, 255, 255 };
+HSV  c_clr     = { 0, 0, 255 };
+HSV  c_gm0     = { 0, 255, 255 };
+HSV  c_gm1     = { 30, 255, 255 };
+void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+  HSV hsv;
+
+  switch (biton32(layer_state)) {
+  case _MOV:
+    hsv = c_mov;
+    break;
+  case _SYM:
+    hsv = c_sym;
+    break;
+  case _WTF:
+    hsv = c_wtf;
+    break;
+  case _CLR:
+    hsv = c_clr;
+    break;
+  case _GM0:
+    hsv = c_gm0;
+    break;
+  case _GM1:
+    hsv = c_gm1;
+    break;
+  default:
+    hsv = c_default;
+    break;
+  }
+
+  if (hsv.v > rgb_matrix_get_val()) {
+    hsv.v = rgb_matrix_get_val();
+  }
+  // RGB rgb = hsv_to_rgb(hsv);
+  rgb_matrix_sethsv(hsv.h, hsv.s, hsv.v);
+
+  // for (uint8_t i = led_min; i <= led_max; i++) {
+  //   if (HAS_FLAGS(g_led_config.flags[i], 0x01)) { // 0x01 == LED_FLAG_MODIFIER
+  //     rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+  //   }
+  // }
 }
-
-void set_clr(int index, HSV clr) {
-    RGB rgb = get_rgb(clr);
-    rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
-}
-void set_clr_all(HSV clr) {
-    RGB rgb = get_rgb(clr);
-    rgb_matrix_set_color_all(rgb.r, rgb.g, rgb.b);
-}
-
-void loop_clrset(int *mask, HSV clr) {
-    for (; *mask != -1; ++mask) {
-        set_clr(*mask, clr);
-    }
-}
-
-/* clang-format off */
-/* 24, 23, 18, 17, 10, 9,           36, 37, 44, 45, 50, 51, \ */
-/* 25, 22, 19, 16, 11, 8,           35, 38, 43, 46, 49, 52, \ */
-/* 26, 21, 20, 15, 12, 7,           34, 39, 42, 47, 48, 53, \ */
-/*                 14, 13, 6, 33, 40, 41, \ */
-/*      2,      1,      0,           27,      28,      29, \ */
-/*      3,      4,      5,           32,      31,      30 \ */
-enum {
-L_BL1, L_BL2, L_BL3, L_BL4, L_BL5, L_BL6,
-L_LF, L_B, L_G, L_T, L_R, L_F, L_V, L_LM, L_LN,
-L_C, L_D, L_E, L_W, L_S, L_X, L_Z, L_A, L_Q, L_TAB, L_ESC, L_SFT,
-L_BR1, L_BR2, L_BR3, L_BR4, L_BR5, L_BR6,
-L_RF, L_N, L_H, L_Y, L_U, L_J, L_M, L_RM, L_RN,
-L_COM, L_K, L_I, L_O, L_L, L_DOT, L_SL, L_COL, L_P, L_OB, L_QU, L_CB
-};
-/* clang-format on */
-
-/* enum { _DEF, _MOV, _SYM, _CLR, _WTF }; */
-/* clang-format off */
-int L_BL[] = {
-    L_BL1, L_BL2, L_BL3, L_BL4, L_BL5, L_BL6,
-    -1
-};
-int R_BL[] = {
-    L_BR1, L_BR2, L_BR3, L_BR4, L_BR5, L_BR6,
-    -1
-};
-int L_HOME[] = {L_A, L_S, L_D, L_F, -1};
-int R_HOME[] = {L_J, L_K, L_L, L_COL, -1};
-int L_LET[]  = {
-    L_Q, L_W, L_E, L_R, L_T,
-    L_A, L_S, L_D, L_F, L_G,
-    L_Z, L_X, L_C, L_V, L_B,
-    -1
-};
-
-int R_LET[]  = {
-    L_Y, L_U, L_I, L_O, L_P, L_OB,
-    L_H, L_J, L_K, L_L, L_COL, L_QU,
-    L_N, L_M, L_COM, L_DOT, L_SL, L_CB,
-    -1
-};
-int NUMPAD[] = {
-    L_W, L_E, L_R,
-    L_S, L_D, L_F,
-    L_Z, L_X, L_C, L_V,
-    -1
-};
-/* clang-format on */
-
-HSV black = {0, 0, 0};
-HSV white = {0, 0, 127};
-
-HSV red    = {0, 255, 127};
-HSV orange = {21, 255, 127};
-HSV yellow = {43, 255, 127};
-HSV lgreen = {64, 255, 127};
-HSV green  = {85, 255, 127};
-HSV bgreen = {106, 255, 127};
-HSV cyan   = {127, 255, 127};
-HSV azure  = {148, 255, 127};
-HSV blue   = {169, 255, 127};
-HSV blue2  = {180, 255, 127};
-HSV purple = {201, 255, 127};
-HSV pink   = {222, 255, 127};
-
-#define DEF_S_COEF 1
-#define DEF_V_COEF .5
-
-#define C_BASE black
-
-#define C_PRIM  cyan
-#define C_PRIM2 purple
-#define C_SEC   purple
-#define C_SEC2  azure
-
-#define C_MOD   yellow
-#define C_MOD_T orange
-
-#define C_STICKY   green
-#define C_STICKY_T orange
-
-#define C_ESC   lgreen
-#define C_ESC_T orange
-
-#define C_THUMB white
-
-#define C_KILL red
-
-/* #    define USE_BL */
-
-void rgb_matrix_indicators_user(void) {
-    set_clr_all(C_BASE);
-
-    loop_clrset(L_LET, C_PRIM);
-    loop_clrset(L_HOME, C_SEC);
-
-    loop_clrset(R_LET, C_SEC);
-    loop_clrset(R_HOME, C_PRIM);
-
-#ifdef USE_BL
-    loop_clrset(L_BL, C_PRIM2);
-    loop_clrset(R_BL, C_SEC2);
-#endif
-
-    set_clr(L_LF, C_THUMB);
-    set_clr(L_RF, C_THUMB);
-
-    set_clr(L_LM, C_MOD);
-    set_clr(L_RM, C_MOD);
-
-    set_clr(L_LN, C_STICKY);
-    set_clr(L_RN, C_KILL);
-
-    set_clr(L_ESC, C_ESC_T);
-
-    set_clr(L_SFT, shift_locked ? C_STICKY_T : C_PRIM2);
-    set_clr(L_TAB, C_PRIM2);
-
-    switch (biton32(layer_state)) {
-        default:
-            v_coef = DEF_V_COEF;
-            set_clr(L_ESC, C_ESC);
-            break;
-
-        case _SYM:
-            set_clr(L_LM, C_MOD_T);
-            break;
-
-        case _MOV:
-            set_clr(L_RM, C_MOD_T);
-            loop_clrset(NUMPAD, C_PRIM2);
-            break;
-
-        case _WTF:
-            set_clr(L_LM, C_MOD_T);
-            set_clr(L_RM, C_MOD_T);
-            break;
-
-        case _CLR:
-            loop_clrset(L_HOME, C_PRIM);
-            loop_clrset(R_HOME, C_SEC);
-            set_clr(L_LN, C_STICKY_T);
-            break;
-    }
-}
-#endif
