@@ -41,22 +41,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DEF] = HRM_LAYOUT_split_3x6_3(
        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_LBRC,
        KC_ESC,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
-      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RBRC,
-                                        TT(_CLR), MO(_SYM), KC_SPC,    KC_ENT, LT(_MOV, KC_BSPC), KC_BSPC
+OSM(MOD_LSFT),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RBRC,
+                                     TT(_CLR), MO(_SYM), KC_SPC,    KC_ENT, LT(_MOV, KC_BSPC), KC_BSPC
   ),
 
   [_SYM] = LAYOUT_split_3x6_3(
        KC_F11,   KC_AT, KC_PIPE, KC_MINS,  KC_EQL,  KC_GRV,             XXXXXXX,  KC_PLUS, KC_MINS,  KC_EQL, XXXXXXX, XXXXXXX,
      TG(_SYM), KC_EXLM, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES,             KC_DLR,  KC_LCBR, KC_RCBR, KC_UNDS, KC_CIRC, XXXXXXX,
       KC_LCTL,  KC_DLR, KC_PERC, KC_BSLS, KC_HASH, XXXXXXX,             KC_ASTR, KC_LBRC, KC_RBRC, KC_ASTR, KC_BSLS, XXXXXXX,
-                                     TT(_CLR), _______, KC_SPC,     KC_ENT, MO(_WTF), KC_DEL
+                                     TT(_CLR), _______, KC_SPC,    KC_SCROLL_LOCK, LT(_WTF, KC_SCROLL_LOCK), KC_DEL
   ),
 
   [_MOV] = HRM_LAYOUT_split_3x6_3(
-       KC_TAB, KC_COMM,    KC_7,    KC_8,    KC_9, KC_TILD,             KC_COPY, XXXXXXX,  KC_INS, XXXXXXX, KC_PSTE, XXXXXXX,
+       KC_TAB, KC_COMM,    KC_7,    KC_8,    KC_9,  KC_TAB,             KC_COPY, XXXXXXX,  KC_INS, XXXXXXX, KC_PSTE, XXXXXXX,
      TG(_MOV),  KC_TAB,    KC_4,    KC_5,    KC_6,  KC_DOT,             KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
       KC_LSFT,    KC_0,    KC_1,    KC_2,    KC_3, KC_COMM,             KC_HOME, KC_PGDN, KC_PGUP,  KC_END, XXXXXXX, XXXXXXX,
-                                   TT(_CLR), MO(_WTF), KC_SPC,      KC_ENT, _______, KC_BSPC
+                    TT(_CLR), LT(_WTF, KC_SCROLL_LOCK), CW_TOGG,      KC_ENT, _______, KC_BSPC
   ),
 
   [_WTF] = LAYOUT_split_3x6_3(
@@ -89,17 +89,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 /* clang-format on */
 
-// #undef COMBO_TERM
-// #define COMBO_TERM 20
-// #define EXTRA_SHORT_COMBOS
-//
-// const uint16_t PROGMEM ques_combo[] = { M_LG(KC_S), M_LC(KC_F), COMBO_END };
-// const uint16_t PROGMEM exlm_combo[] = { KC_W, KC_E, COMBO_END };
-//
-// combo_t key_combos[] = {
-//   COMBO(ques_combo, MT(MOD_LGUI | MOD_LCTL, KC_QUES)),
-//   COMBO(exlm_combo, KC_EXLM),
-// };
+#undef COMBO_TERM
+#define COMBO_TERM 20
+#define EXTRA_SHORT_COMBOS
+
+const uint16_t PROGMEM equal_combo[] = {KC_E, KC_R, COMBO_END};
+const uint16_t PROGMEM grave_combo[] = {KC_E, KC_T, COMBO_END};
+const uint16_t PROGMEM minus_combo[] = {KC_U, KC_I, COMBO_END};
+const uint16_t PROGMEM lbrct_combo[] = {KC_Y, KC_I, COMBO_END};
+
+const uint16_t PROGMEM bsls_combo[] = {KC_X, KC_C, COMBO_END};
+
+const uint16_t PROGMEM qstn_combo[] = {M_LG(KC_S), M_LC(KC_F), COMBO_END};
+const uint16_t PROGMEM amps_combo[] = {KC_E, M_LC(KC_F), COMBO_END};
+const uint16_t PROGMEM pipe_combo[] = {M_LG(KC_S), KC_E, COMBO_END};
+
+const uint16_t PROGMEM circ_combo[] = {M_LG(KC_L), M_LC(KC_J), COMBO_END};
+
+const uint16_t PROGMEM astr_combo[] = {KC_COMM, KC_DOT, COMBO_END};
+
+/* clang-format off */
+combo_t key_combos[] = {
+    COMBO(equal_combo, KC_EQL),
+    COMBO(grave_combo, KC_GRV),
+    COMBO(minus_combo, KC_MINS),
+    COMBO(lbrct_combo, KC_LBRC),
+
+    COMBO(bsls_combo, KC_BSLS),
+
+    COMBO(qstn_combo, KC_QUES),
+    COMBO(amps_combo, KC_AMPR),
+    COMBO(pipe_combo, KC_PIPE),
+
+    COMBO(circ_combo, KC_CIRC),
+
+    COMBO(astr_combo, KC_ASTR),
+};
+/* clang-format on */
 
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t* record) {
   switch (keycode) {
@@ -193,14 +219,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         }
       }
       return false;
-    case MO(_SYM):
-      if (record->event.pressed && record->tap.count) {
-        set_oneshot_mods(MOD_BIT(KC_LSFT));
-        return false;
-      }
-      return true;
     default:
       return true;
+  }
+}
+
+bool caps_word_press_user(uint16_t keycode) {
+  switch (keycode) {
+    // Keycodes that continue Caps Word, with shift applied.
+    case KC_A ... KC_Z:
+    case KC_COMM:
+    case KC_DOT:
+      add_weak_mods(MOD_BIT(KC_LSFT)); // Apply shift to next key.
+      return true;
+
+    // Keycodes that continue Caps Word, without shifting.
+    case KC_1 ... KC_0:
+    case KC_BSPC:
+    case KC_DEL:
+    case KC_MINS:
+    case KC_UNDS:
+      return true;
+
+    default:
+      return false; // Deactivate Caps Word.
   }
 }
 
