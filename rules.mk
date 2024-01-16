@@ -1,9 +1,11 @@
 OLED_ENABLE = yes
-OLED_DRIVER = SSD1306
+OLED_DRIVER = ssd1306
 
 EXTRAKEY_ENABLE    = yes  # Audio and System control
 NKRO_ENABLE        = yes  # Nkey Rollover
+# COMBO_ENABLE       = yes
 # DYNAMIC_MACRO_ENABLE = yes
+# TAP_DANCE_ENABLE   = yes
 
 MOUSEKEY_ENABLE    = no   # Mouse keys
 RGBLIGHT_ENABLE    = no   # WS2812 RGB underlight

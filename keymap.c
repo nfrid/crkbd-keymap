@@ -1,7 +1,7 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 #ifdef ACHORDION
-#include "features/achordion.h"
+#  include "features/achordion.h"
 #endif
 
 enum { _DEF = 0, _CLR, _GM0, _GM1, _MOV, _SYM, _WTF };
@@ -42,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_LBRC,
        KC_ESC,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
       KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RBRC,
-                                     TT(_CLR), MO(_SYM), KC_SPC,    KC_ENT, MO(_MOV), KC_BSPC
+                                        TT(_CLR), MO(_SYM), KC_SPC,    KC_ENT, LT(_MOV, KC_BSPC), KC_BSPC
   ),
 
   [_SYM] = LAYOUT_split_3x6_3(
@@ -60,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_WTF] = LAYOUT_split_3x6_3(
-        RESET,  KC_F10,   KC_F7,   KC_F8,   KC_F9,  KC_F20,             KC_TGMM, KC_TGCT, KC_TGAL, KC_TGSP, RGB_HUI, RGB_TOG,
+       QK_RBT,  KC_F10,   KC_F7,   KC_F8,   KC_F9,  KC_F20,             KC_TGMM, KC_TGCT, KC_TGAL, KC_TGSP, RGB_HUI, RGB_TOG,
      TG(_WTF),  KC_F11,   KC_F4,   KC_F5,   KC_F6,  KC_F21,             KC_MUTE, KC_VOLD, KC_VOLU, KC_PSCR, KC_TGSF, RGB_MOD,
       KC_CAPS,  KC_F12,   KC_F1,   KC_F2,   KC_F3,  KC_F22,             KC_MSTP, KC_MPRV, KC_MNXT, KC_MPLY, RGB_VAI, RGB_SPI,
                                      TT(_CLR), _______, KC_SPC,     KC_ENT, _______, KC_BSPC
@@ -89,19 +89,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 /* clang-format on */
 
+// #undef COMBO_TERM
+// #define COMBO_TERM 20
+// #define EXTRA_SHORT_COMBOS
+//
+// const uint16_t PROGMEM ques_combo[] = { M_LG(KC_S), M_LC(KC_F), COMBO_END };
+// const uint16_t PROGMEM exlm_combo[] = { KC_W, KC_E, COMBO_END };
+//
+// combo_t key_combos[] = {
+//   COMBO(ques_combo, MT(MOD_LGUI | MOD_LCTL, KC_QUES)),
+//   COMBO(exlm_combo, KC_EXLM),
+// };
+
 bool get_tapping_force_hold(uint16_t keycode, keyrecord_t* record) {
   switch (keycode) {
-  case TT(_CLR):
-  case M_LC(KC_J):
-  case M_LA(KC_K):
-  case M_LG(KC_L):
-  case M_LC(KC_DOWN):
-  case M_LA(KC_UP):
-  case M_LG(KC_RGHT):
-  case M_LS(KC_TAB):
-    return false;
-  default:
-    return true;
+    case TT(_CLR):
+    case M_LC(KC_J):
+    case M_LA(KC_K):
+    case M_LG(KC_L):
+    case M_LC(KC_DOWN):
+    case M_LA(KC_UP):
+    case M_LG(KC_RGHT):
+    case M_LS(KC_TAB):
+      return false;
+    default:
+      return true;
   }
 }
 
@@ -111,7 +123,9 @@ bool alt_locked   = false;
 bool ctrl_locked  = false;
 
 #ifdef ACHORDION
-void matrix_scan_user(void) { achordion_task(); }
+void matrix_scan_user(void) {
+  achordion_task();
+}
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
@@ -122,66 +136,71 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 #endif
 
   switch (keycode) {
-  case KC_TGSF:
-    if (record->event.pressed) {
-      shift_locked = !shift_locked;
-      if (shift_locked) {
-        add_mods(MOD_MASK_SHIFT);
-      } else {
-        del_mods(MOD_MASK_SHIFT);
+    case KC_TGSF:
+      if (record->event.pressed) {
+        shift_locked = !shift_locked;
+        if (shift_locked) {
+          add_mods(MOD_MASK_SHIFT);
+        } else {
+          del_mods(MOD_MASK_SHIFT);
+        }
       }
-    }
-    return false;
-  case KC_TGSP:
-    if (record->event.pressed) {
-      super_locked = !super_locked;
-      if (super_locked) {
-        add_mods(MOD_MASK_GUI);
-      } else {
-        del_mods(MOD_MASK_GUI);
+      return false;
+    case KC_TGSP:
+      if (record->event.pressed) {
+        super_locked = !super_locked;
+        if (super_locked) {
+          add_mods(MOD_MASK_GUI);
+        } else {
+          del_mods(MOD_MASK_GUI);
+        }
       }
-    }
-    return false;
-  case KC_TGAL:
-    if (record->event.pressed) {
-      alt_locked = !alt_locked;
-      if (alt_locked) {
-        add_mods(MOD_MASK_ALT);
-      } else {
-        del_mods(MOD_MASK_ALT);
+      return false;
+    case KC_TGAL:
+      if (record->event.pressed) {
+        alt_locked = !alt_locked;
+        if (alt_locked) {
+          add_mods(MOD_MASK_ALT);
+        } else {
+          del_mods(MOD_MASK_ALT);
+        }
       }
-    }
-    return false;
-  case KC_TGCT:
-    if (record->event.pressed) {
-      ctrl_locked = !ctrl_locked;
-      if (ctrl_locked) {
-        add_mods(MOD_MASK_CTRL);
-      } else {
-        del_mods(MOD_MASK_CTRL);
+      return false;
+    case KC_TGCT:
+      if (record->event.pressed) {
+        ctrl_locked = !ctrl_locked;
+        if (ctrl_locked) {
+          add_mods(MOD_MASK_CTRL);
+        } else {
+          del_mods(MOD_MASK_CTRL);
+        }
       }
-    }
-    return false;
-  case KC_TGMM:
-    if (record->event.pressed) {
-      if (!get_mods()) {
-        shift_locked = true;
-        super_locked = true;
-        alt_locked   = true;
-        ctrl_locked  = true;
-        set_mods(MOD_MASK_CSAG);
-      } else {
-
-        shift_locked = false;
-        super_locked = false;
-        alt_locked   = false;
-        ctrl_locked  = false;
-        clear_mods();
+      return false;
+    case KC_TGMM:
+      if (record->event.pressed) {
+        if (!get_mods()) {
+          shift_locked = true;
+          super_locked = true;
+          alt_locked   = true;
+          ctrl_locked  = true;
+          set_mods(MOD_MASK_CSAG);
+        } else {
+          shift_locked = false;
+          super_locked = false;
+          alt_locked   = false;
+          ctrl_locked  = false;
+          clear_mods();
+        }
       }
-    }
-    return false;
-  default:
-    return true;
+      return false;
+    case MO(_SYM):
+      if (record->event.pressed && record->tap.count) {
+        set_oneshot_mods(MOD_BIT(KC_LSFT));
+        return false;
+      }
+      return true;
+    default:
+      return true;
   }
 }
 
@@ -195,34 +214,34 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 void oled_render_layer_state(void) {
   oled_write_P(PSTR("@:"), false);
   switch (biton32(layer_state)) {
-  case _MOV:
-    oled_write_P(PSTR("mov"), false);
-    break;
-  case _SYM:
-    oled_write_P(PSTR("sym"), false);
-    break;
-  case _WTF:
-    oled_write_P(PSTR("wtf"), false);
-    break;
-  case _CLR:
-    oled_write_P(PSTR("clr"), true);
-    break;
-  case _GM0:
-    oled_write_P(PSTR("gm0"), false);
-    break;
-  case _GM1:
-    oled_write_P(PSTR("gm1"), false);
-    break;
-  default:
-    oled_write_P(PSTR("def"), false);
-    break;
+    case _MOV:
+      oled_write_P(PSTR("mov"), false);
+      break;
+    case _SYM:
+      oled_write_P(PSTR("sym"), false);
+      break;
+    case _WTF:
+      oled_write_P(PSTR("wtf"), false);
+      break;
+    case _CLR:
+      oled_write_P(PSTR("clr"), true);
+      break;
+    case _GM0:
+      oled_write_P(PSTR("gm0"), false);
+      break;
+    case _GM1:
+      oled_write_P(PSTR("gm1"), false);
+      break;
+    default:
+      oled_write_P(PSTR("def"), false);
+      break;
   }
 }
 
 // through caps lock indicator
 void oled_render_layout(void) {
   oled_write_P(PSTR("lt:"), false);
-  if (IS_HOST_LED_ON(USB_LED_NUM_LOCK)) {
+  if (host_keyboard_led_state().num_lock) {
     oled_write_P(PSTR("ru"), true);
   } else {
     oled_write_P(PSTR("us"), false);
@@ -288,7 +307,7 @@ void oled_render_mods(void) {
     oled_write_P(PSTR("shift"), shift_locked);
   else
     oled_write_P(PSTR("     "), false);
-  if (IS_HOST_LED_ON(USB_LED_CAPS_LOCK))
+  if (host_keyboard_led_state().caps_lock)
     oled_write_P(PSTR(" caps"), true);
   else
     oled_write_P(PSTR("     "), false);
@@ -322,38 +341,38 @@ bool oled_task_user(void) {
   return false;
 }
 
-HSV  c_default = { 120, 255, 255 };
-HSV  c_mov     = { 90, 255, 255 };
-HSV  c_sym     = { 160, 255, 255 };
-HSV  c_wtf     = { 220, 255, 255 };
-HSV  c_clr     = { 0, 0, 255 };
-HSV  c_gm0     = { 0, 255, 255 };
-HSV  c_gm1     = { 30, 255, 255 };
-void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+HSV  c_default = {120, 255, 255};
+HSV  c_mov     = {90, 255, 255};
+HSV  c_sym     = {160, 255, 255};
+HSV  c_wtf     = {220, 255, 255};
+HSV  c_clr     = {0, 0, 255};
+HSV  c_gm0     = {0, 255, 255};
+HSV  c_gm1     = {30, 255, 255};
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
   HSV hsv;
 
   switch (biton32(layer_state)) {
-  case _MOV:
-    hsv = c_mov;
-    break;
-  case _SYM:
-    hsv = c_sym;
-    break;
-  case _WTF:
-    hsv = c_wtf;
-    break;
-  case _CLR:
-    hsv = c_clr;
-    break;
-  case _GM0:
-    hsv = c_gm0;
-    break;
-  case _GM1:
-    hsv = c_gm1;
-    break;
-  default:
-    hsv = c_default;
-    break;
+    case _MOV:
+      hsv = c_mov;
+      break;
+    case _SYM:
+      hsv = c_sym;
+      break;
+    case _WTF:
+      hsv = c_wtf;
+      break;
+    case _CLR:
+      hsv = c_clr;
+      break;
+    case _GM0:
+      hsv = c_gm0;
+      break;
+    case _GM1:
+      hsv = c_gm1;
+      break;
+    default:
+      hsv = c_default;
+      break;
   }
 
   if (hsv.v > rgb_matrix_get_val()) {
@@ -363,8 +382,10 @@ void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
   rgb_matrix_sethsv(hsv.h, hsv.s, hsv.v);
 
   // for (uint8_t i = led_min; i <= led_max; i++) {
-  //   if (HAS_FLAGS(g_led_config.flags[i], 0x01)) { // 0x01 == LED_FLAG_MODIFIER
+  //   if (HAS_FLAGS(g_led_config.flags[i], 0x01)) { // 0x01 ==
+  //   LED_FLAG_MODIFIER
   //     rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
   //   }
   // }
+  return false;
 }

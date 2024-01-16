@@ -1,17 +1,15 @@
 #pragma once
 
-//#define USE_MATRIX_I2C
+// #define USE_MATRIX_I2C
 
-// #define MASTER_LEFT
-#define MASTER_RIGHT
+#define MASTER_LEFT
+// #define MASTER_RIGHT
 // #define EE_HANDS
 
 #define USE_SERIAL_PD2
 
-#define TAPPING_FORCE_HOLD_PER_KEY
-#define IGNORE_MOD_TAP_INTERRUPT
 #define PERMISSIVE_HOLD
-#define TAPPING_TERM 300
+#define TAPPING_TERM 200
 
 #define TAPPING_TOGGLE 2
 
@@ -23,10 +21,10 @@
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 /* #define RGB_MATRIX_FRAMEBUFFER_EFFECTS */
 #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 150
-#define RGB_MATRIX_HUE_STEP           8
-#define RGB_MATRIX_SAT_STEP           8
-#define RGB_MATRIX_VAL_STEP           8
-#define RGB_MATRIX_SPD_STEP           10
+#define RGB_MATRIX_HUE_STEP 8
+#define RGB_MATRIX_SAT_STEP 8
+#define RGB_MATRIX_VAL_STEP 8
+#define RGB_MATRIX_SPD_STEP 10
 
 // #define ENABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #define ENABLE_RGB_MATRIX_SOLID_REACTIVE
@@ -73,4 +71,4 @@
 #define FORCE_NKRO
 
 #undef PRODUCT
-#define PRODUCT crkbd
+#define PRODUCT "crkbd"
