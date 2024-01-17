@@ -1,7 +1,12 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
+#include "homerow.h"
+
 #ifdef ACHORDION
 #  include "features/achordion.h"
+#endif
+#ifdef COMBOS
+#  include "combos.c"
 #endif
 
 enum { _DEF = 0, _CLR, _GM0, _GM1, _MOV, _SYM, _WTF };
@@ -14,29 +19,7 @@ enum my_keycodes {
   KC_TGMM,
 };
 
-#define M_LS(kc) MT(MOD_LSFT, kc)
-#define M_LG(kc) MT(MOD_LGUI, kc)
-#define M_LA(kc) MT(MOD_LALT, kc)
-#define M_LC(kc) MT(MOD_LCTL, kc)
-
-#define M_RS(kc) MT(MOD_RSFT, kc)
-#define M_RG(kc) MT(MOD_RGUI, kc)
-#define M_RA(kc) MT(MOD_RALT, kc)
-#define M_RC(kc) MT(MOD_RCTL, kc)
-
 /* clang-format off */
-#define HRM_LAYOUT_split_3x6_3( \
-    k0a, k00, k01, k02, k03, k04,       k05, k06, k07, k08, k09, k0b, \
-    k1a, k10, k11, k12, k13, k14,       k15, k16, k17, k18, k19, k1b, \
-    k2a, k20, k21, k22, k23, k24,       k25, k26, k27, k28, k29, k2b, \
-                     k32, k33, k34,   k35, k36, k37 \
-) LAYOUT_split_3x6_3( \
-    k0a,       k00,       k01,       k02,       k03, k04,       k05,       k06,       k07,       k08,       k09, k0b, \
-    k1a, M_LS(k10), M_LG(k11), M_LA(k12), M_LC(k13), k14,       k15, M_LC(k16), M_LA(k17), M_LG(k18), M_LS(k19), k1b, \
-    k2a,       k20,       k21,       k22,       k23, k24,       k25,       k26,       k27,       k28,       k29, k2b, \
-                                             k32, k33, k34,   k35, k36, k37 \
-)
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DEF] = HRM_LAYOUT_split_3x6_3(
        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_LBRC,
@@ -86,42 +69,6 @@ OSM(MOD_LSFT),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,
       KC_LCTL,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,                KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RBRC,
                                      KC_LALT,  _______,  KC_ENT,    KC_ENT, MO(_MOV), KC_BSPC
   ),
-};
-/* clang-format on */
-
-#undef COMBO_TERM
-#define COMBO_TERM 1
-#define EXTRA_SHORT_COMBOS
-
-const uint16_t PROGMEM exlm_combo[]  = {KC_W, KC_E, COMBO_END};
-const uint16_t PROGMEM equal_combo[] = {KC_E, KC_R, COMBO_END};
-const uint16_t PROGMEM grave_combo[] = {KC_E, KC_T, COMBO_END};
-const uint16_t PROGMEM minus_combo[] = {KC_O, KC_I, COMBO_END};
-const uint16_t PROGMEM circ_combo[]  = {KC_I, KC_U, COMBO_END};
-const uint16_t PROGMEM lbrct_combo[] = {KC_Y, KC_I, COMBO_END};
-const uint16_t PROGMEM bsls_combo[]  = {KC_X, KC_C, COMBO_END};
-
-const uint16_t PROGMEM qstn_combo[] = {M_LG(KC_S), M_LC(KC_F), COMBO_END};
-const uint16_t PROGMEM amps_combo[] = {KC_E, M_LC(KC_F), COMBO_END};
-const uint16_t PROGMEM pipe_combo[] = {M_LG(KC_S), KC_E, COMBO_END};
-
-const uint16_t PROGMEM astr_combo[] = {KC_COMM, KC_DOT, COMBO_END};
-
-/* clang-format off */
-combo_t key_combos[] = {
-    COMBO(exlm_combo, KC_EXLM),
-    COMBO(equal_combo, KC_EQL),
-    COMBO(grave_combo, KC_GRV),
-    COMBO(minus_combo, KC_MINS),
-    COMBO(circ_combo, KC_CIRC),
-    COMBO(lbrct_combo, KC_LBRC),
-    COMBO(bsls_combo, KC_BSLS),
-
-    COMBO(qstn_combo, KC_QUES),
-    COMBO(amps_combo, KC_AMPR),
-    COMBO(pipe_combo, KC_PIPE),
-
-    COMBO(astr_combo, KC_ASTR),
 };
 /* clang-format on */
 
@@ -289,35 +236,6 @@ void oled_render_layout(void) {
 }
 
 void oled_render_rgbinfo(void) {
-  // oled_write_P(PSTR("m:"), false);
-  // if (rgb_matrix_is_enabled()) {
-  //   switch (rgb_matrix_get_mode()) {
-  //   case 2:
-  //     oled_write_P(PSTR("rsm"), false);
-  //     break;
-  //   case 3:
-  //     oled_write_P(PSTR("rsl"), false);
-  //     break;
-  //   case 4:
-  //     oled_write_P(PSTR("rwd"), false);
-  //     break;
-  //   case 5:
-  //     oled_write_P(PSTR("rnx"), false);
-  //     break;
-  //   case 6:
-  //     oled_write_P(PSTR("spl"), false);
-  //     break;
-  //   case 7:
-  //     oled_write_P(PSTR("ssp"), false);
-  //     break;
-  //   default:
-  //     oled_write_P(PSTR("sld"), false);
-  //     break;
-  //   }
-  // } else {
-  //   oled_write_P(PSTR("off"), true);
-  // }
-  //
   char hsv[11];
   /* clang-format off */
     sprintf(hsv, "s:%3dv:%3d",

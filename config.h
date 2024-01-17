@@ -1,5 +1,7 @@
 #pragma once
 
+#define COMBOS
+
 // #define USE_MATRIX_I2C
 
 #define MASTER_LEFT
