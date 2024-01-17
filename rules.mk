@@ -24,6 +24,6 @@ WPM_ENABLE         = no   # wpm meter
 RGB_MATRIX_ENABLE  = yes  # WS2812 RGB matrix
 
 EXTRAFLAGS+=-flto  # Linking go brrrrr
-AVR_CFLAGS=-Wno-array-bounds
+AVR_CFLAGS=-Wno-array-bounds -Wno-attributes
 
 SRC += features/achordion.c
