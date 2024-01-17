@@ -1,3 +1,5 @@
+#pragma once
+
 #include QMK_KEYBOARD_H
 
 #define M_LS(kc) MT(MOD_LSFT, kc)
