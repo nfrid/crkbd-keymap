@@ -46,7 +46,7 @@ OSM(MOD_LSFT),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,
   ),
 
   [_SYM] = LAYOUT_split_3x6_3(
-       KC_F11,   KC_AT, KC_PIPE, KC_MINS,  KC_EQL,  KC_GRV,             XXXXXXX,  KC_PLUS, KC_MINS,  KC_EQL, XXXXXXX, XXXXXXX,
+       KC_F11,   KC_AT, KC_PIPE,   KC_AT,  KC_EQL,  KC_GRV,             XXXXXXX,  KC_PLUS, KC_MINS,  KC_EQL, XXXXXXX, XXXXXXX,
      TG(_SYM), KC_EXLM, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES,             KC_UNDS,  KC_LCBR, KC_RCBR,  KC_DLR, KC_CIRC, XXXXXXX,
       KC_LCTL,  KC_DLR, KC_PERC, KC_BSLS, KC_HASH, XXXXXXX,             KC_ASTR,  KC_LBRC, KC_RBRC, KC_ASTR, KC_BSLS, XXXXXXX,
                                      TT(_CLR), _______, KC_SPC,    KC_SCROLL_LOCK, LT(_WTF, KC_SCROLL_LOCK), KC_DEL
@@ -90,7 +90,7 @@ OSM(MOD_LSFT),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,
 /* clang-format on */
 
 #undef COMBO_TERM
-#define COMBO_TERM 5
+#define COMBO_TERM 1
 #define EXTRA_SHORT_COMBOS
 
 const uint16_t PROGMEM exlm_combo[]  = {KC_W, KC_E, COMBO_END};
