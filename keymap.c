@@ -47,8 +47,8 @@ OSM(MOD_LSFT),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,
 
   [_SYM] = LAYOUT_split_3x6_3(
        KC_F11,   KC_AT, KC_PIPE, KC_MINS,  KC_EQL,  KC_GRV,             XXXXXXX,  KC_PLUS, KC_MINS,  KC_EQL, XXXXXXX, XXXXXXX,
-     TG(_SYM), KC_EXLM, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES,             KC_DLR,  KC_LCBR, KC_RCBR, KC_UNDS, KC_CIRC, XXXXXXX,
-      KC_LCTL,  KC_DLR, KC_PERC, KC_BSLS, KC_HASH, XXXXXXX,             KC_ASTR, KC_LBRC, KC_RBRC, KC_ASTR, KC_BSLS, XXXXXXX,
+     TG(_SYM), KC_EXLM, KC_AMPR, KC_LPRN, KC_RPRN, KC_QUES,             KC_UNDS,  KC_LCBR, KC_RCBR,  KC_DLR, KC_CIRC, XXXXXXX,
+      KC_LCTL,  KC_DLR, KC_PERC, KC_BSLS, KC_HASH, XXXXXXX,             KC_ASTR,  KC_LBRC, KC_RBRC, KC_ASTR, KC_BSLS, XXXXXXX,
                                      TT(_CLR), _______, KC_SPC,    KC_SCROLL_LOCK, LT(_WTF, KC_SCROLL_LOCK), KC_DEL
   ),
 
@@ -90,38 +90,36 @@ OSM(MOD_LSFT),    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                KC_N,
 /* clang-format on */
 
 #undef COMBO_TERM
-#define COMBO_TERM 20
+#define COMBO_TERM 5
 #define EXTRA_SHORT_COMBOS
 
+const uint16_t PROGMEM exlm_combo[]  = {KC_W, KC_E, COMBO_END};
 const uint16_t PROGMEM equal_combo[] = {KC_E, KC_R, COMBO_END};
 const uint16_t PROGMEM grave_combo[] = {KC_E, KC_T, COMBO_END};
-const uint16_t PROGMEM minus_combo[] = {KC_U, KC_I, COMBO_END};
+const uint16_t PROGMEM minus_combo[] = {KC_O, KC_I, COMBO_END};
+const uint16_t PROGMEM circ_combo[]  = {KC_I, KC_U, COMBO_END};
 const uint16_t PROGMEM lbrct_combo[] = {KC_Y, KC_I, COMBO_END};
-
-const uint16_t PROGMEM bsls_combo[] = {KC_X, KC_C, COMBO_END};
+const uint16_t PROGMEM bsls_combo[]  = {KC_X, KC_C, COMBO_END};
 
 const uint16_t PROGMEM qstn_combo[] = {M_LG(KC_S), M_LC(KC_F), COMBO_END};
 const uint16_t PROGMEM amps_combo[] = {KC_E, M_LC(KC_F), COMBO_END};
 const uint16_t PROGMEM pipe_combo[] = {M_LG(KC_S), KC_E, COMBO_END};
 
-const uint16_t PROGMEM circ_combo[] = {M_LG(KC_L), M_LC(KC_J), COMBO_END};
-
 const uint16_t PROGMEM astr_combo[] = {KC_COMM, KC_DOT, COMBO_END};
 
 /* clang-format off */
 combo_t key_combos[] = {
+    COMBO(exlm_combo, KC_EXLM),
     COMBO(equal_combo, KC_EQL),
     COMBO(grave_combo, KC_GRV),
     COMBO(minus_combo, KC_MINS),
+    COMBO(circ_combo, KC_CIRC),
     COMBO(lbrct_combo, KC_LBRC),
-
     COMBO(bsls_combo, KC_BSLS),
 
     COMBO(qstn_combo, KC_QUES),
     COMBO(amps_combo, KC_AMPR),
     COMBO(pipe_combo, KC_PIPE),
-
-    COMBO(circ_combo, KC_CIRC),
 
     COMBO(astr_combo, KC_ASTR),
 };
