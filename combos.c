@@ -21,6 +21,7 @@ const uint16_t PROGMEM as_combo[] = {M_LS(KC_A), M_LG(KC_S), COMBO_END};
 
 const uint16_t PROGMEM jk_combo[] = {M_LC(KC_J), M_LA(KC_K), COMBO_END};
 const uint16_t PROGMEM kl_combo[] = {M_LA(KC_K), M_LG(KC_L), COMBO_END};
+const uint16_t PROGMEM jl_combo[] = {M_LC(KC_J), M_LG(KC_L), COMBO_END};
 const uint16_t PROGMEM lscl_cmb[] = {M_LG(KC_L), M_LS(KC_SCLN), COMBO_END};
 
 const uint16_t PROGMEM cmdt_cmb[] = {KC_COMM, KC_DOT, COMBO_END};
@@ -42,6 +43,7 @@ enum {
   as,
   jk,
   kl,
+  jl,
   lscl,
   cmdt,
 };
@@ -58,7 +60,7 @@ combo_t key_combos[] = {
     [df] = COMBO(df_combo, KC_RPRN), // )
     [sd] = COMBO(sd_combo, KC_LPRN), // (
     [io] = COMBO(io_combo, KC_MINS), // -
-    [ui] = COMBO(ui_combo, KC_CIRC), // ^ :
+    [ui] = COMBO(ui_combo, KC_PLUS), // +
     [yi] = COMBO(yi_combo, KC_LBRC), // [ х
 
     [sf] = COMBO(sf_combo, KC_QUES), // ? ,
@@ -68,6 +70,7 @@ combo_t key_combos[] = {
 
     [jk]   = COMBO(jk_combo, KC_UNDS), // _
     [kl]   = COMBO(kl_combo, KC_DLR),  // $ ;
+    [jl]   = COMBO(jl_combo, KC_CIRC), // ^ :
     [lscl] = COMBO(lscl_cmb, OSM(MOD_LSFT)),
 
     //    ,.
